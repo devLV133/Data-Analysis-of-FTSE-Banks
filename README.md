@@ -1,82 +1,40 @@
-# AI Banking Research Assistant
+# Bank Price Comparison Pilot
 
-A research prototype for exploring UK-listed banks through natural-language questions, market data and financial news. The notebook combines an interactive Gradio chatbot with separate analytical tools to support accessible, evidence-based research.
+A Python notebook that retrieves adjusted daily prices, aligns trading dates across selected UK-listed banks and produces a comparison table and chart. An optional Gradio chat explains the supplied price evidence using OpenAI.
 
-## Features
+## What it does
 
-- Conversational questions and follow-ups with adjustable response settings.
-- Historical market data, recent news and comparisons across banks.
-- Separate analysis of performance, risk, headline sentiment and portfolio allocation.
-- Charts, tables and AI-assisted interpretation of analytical results.
+- Covers Barclays, HSBC, Lloyds, NatWest, Standard Chartered, Investec and Lion Finance Group.
+- Cleans missing, invalid, non-positive and non-finite prices, normalises trading dates and removes duplicate dates.
+- Uses the same overlapping dates for every bank in a comparison.
+- Shows adjusted-close returns, observation counts, actual start/end dates and source links.
+- Plots each bank's adjusted-close performance with a common starting value of 100.
+- Provides optional AI explanations with selected-bank and period controls and recent conversation context.
 
-## Coverage
+## Run
 
-Barclays, HSBC, Lloyds Banking Group, NatWest, Standard Chartered, Investec and Lion Finance Group. The FTSE 100 index and GBP/USD provide additional market context.
+1. Open [AI_Banking_Research_Mini (1).ipynb](AI_Banking_Research_Mini%20%281%29.ipynb) in Google Colab or Jupyter.
+2. Run the setup cell to install pandas, matplotlib, yfinance, openai and Gradio.
+3. Run the configuration cell. Press Enter at the API-key prompt for data-only use, or supply a runtime key for AI chat. Never save the key in the notebook.
+4. Run **Public market data**, then **Example comparison**. Defaults are Barclays and HSBC over three months. Supported periods are `1mo`, `3mo`, `6mo` and `1y`.
+5. To use chat, run **Basic AI response** and **Chat interface**. Set `OPENAI_MODEL` to a model available to your OpenAI account before running configuration. The notebook's model default is not an availability check.
+6. In Colab, choose a password when prompted and open the generated link using username `researcher`. Keep the runtime running. Local Jupyter displays the interface locally.
 
-## Requirements
+Change the bank/period controls to change comparison scope and clear the chat afterwards. Typing different banks or dates in a question does not change those controls. Each AI question retrieves fresh price evidence and may incur OpenAI API charges.
 
-Python in Jupyter Notebook or Google Colab, an internet connection and an OpenAI API key for AI features.
+## Calculations and scope
 
-## Status
+Return is `(last adjusted close / first adjusted close - 1) × 100`, using shared trading dates. Adjusted closes already account for splits and dividends. The comparison stops with an explanation if a selected bank has no usable data or fewer than two shared dates remain.
 
-An academic research prototype. Results depend on available data and analytical assumptions and require independent review.
+This repository contains the price-comparison pilot. It does not implement news retrieval, sentiment analysis, portfolio allocation, fundamental analysis, index/currency context or the full dissertation research workflow. AI explanations are not independently verified.
 
-## How To
+## Troubleshooting
 
-MINI BANKING RESEARCH NOTEBOOK: RUN GUIDE
+- Missing packages or functions: run preceding cells in order.
+- No usable data: check the connection, retry later or select another bank/period.
+- AI request fails: check your model selection, API access and connection.
+- Embedded chat does not open: use the generated Gradio link.
 
-File: AI_Banking_Research_Mini.ipynb
-
-REQUIREMENTS
-
-- Internet access.
-- Google Colab or a local Jupyter environment with Python.
-- An OpenAI API key and access to your chosen model for AI chat.
-- No GPU is needed.
-
-The first cell installs pandas, matplotlib, yfinance, openai and Gradio. You can leave the API key blank to use only the comparison table and chart.
-
-HOW TO RUN
-
-1. Open the notebook.
-Download AI_Banking_Research_Mini.ipynb. Upload it at https://colab.research.google.com/ or open it in Jupyter.
-
-2. Install dependencies.
-Run the first code cell and wait for installation to finish. If prompted to restart the session, do so before continuing.
-
-3. Configure the pilot.
-Run the configuration cell. The defaults are Barclays and HSBC over three months. Change SELECTED_BANKS and PERIOD if needed. Supported periods are 1mo, 3mo, 6mo and 1y.
-
-Set MODEL to a model available through your OpenAI API account. The notebook defaults to gpt-6-luna; this setting does not verify availability. Enter your API key at the hidden prompt, or press Enter for data-only use.
-
-4. Prepare market-data functions.
-Run the Public market data cell. This defines the retrieval and comparison functions. No visible output is expected yet.
-
-5. Generate the comparison.
-Run the Example comparison cell. It retrieves prices and displays a return table and chart. The table shows the actual shared comparison dates. Returns use split/dividend-adjusted closes; dividends are not added again.
-
-6. Prepare AI responses.
-Run the Basic AI response cell. This defines the chat function without sending an AI request.
-
-7. Launch the chat interface.
-Run the Chat interface cell. In Colab, choose a password when prompted. Open the displayed interface or generated link. Sign in with username researcher and the password you chose. Local Jupyter normally displays the interface without this Colab login step.
-
-8. Ask a question.
-Select banks and a period in the interface. Try: Compare these banks and show the actual dates.
-
-Change the dropdowns for a different comparison and clear the chat after changing scope. The pilot does not automatically change the controls based on your question. Keep the notebook session running while chatting. Each submitted AI question uses your OpenAI API account.
-
-TROUBLESHOOTING
-
-Missing package or undefined function: Run the preceding cells in order.
-No usable price data: Retry later or select different banks.
-AI request fails: Check your API key, model access and connection.
-Embedded chat does not open: Open the generated Gradio link in a separate tab.
-
-SCOPE AND VALIDATION
-
-This pilot supports price comparisons. News retrieval, advanced analysis and the full research workflow are not included. Core logic passed offline checks; live API and browser execution were not tested here.
-
-Clear outputs before publishing a run containing private questions or session links. Do not put your API key directly into notebook code.
+Python in Jupyter/Colab and internet access are required. No GPU is needed. Clear outputs before sharing a run containing private questions or session links.
 
 
